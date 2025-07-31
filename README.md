@@ -31,7 +31,7 @@ blank
 ## 데이터 개요
 | 출처 | 링크 | 데이터 개수 | 구성 |
 |---|---|---|---|
-| 국토교통 통계누리 | https://stat.molit.go.kr/portal/cate/statView.do?hRsId=58&hFormId=5498&hDivEng=&month_yn= | blank | blank |
+| 국토교통 통계누리 | https://stat.molit.go.kr/portal/cate/statView.do?hRsId=58&hFormId=5498&hDivEng=&month_yn=  https://www.data.go.kr/data/15056611/openapi.do| blank | blank |
 | 현대자동차 FAQ | blank | blank | blank |
 | 기아자동차 FAQ | blank | blank | blank |
 | 추가 예정 | blank | blank | blank |
