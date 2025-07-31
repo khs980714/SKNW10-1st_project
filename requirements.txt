@@ -1,0 +1,19 @@
+# 기본 설치
+jupyter
+
+# 데이터 처리
+numpy
+pandas
+
+# 데이터 시각화
+matplotlib
+seaborn
+plotly
+
+# 웹 크롤링
+requests
+beautifulsoup4
+selenium
+
+# 웹 프레임워크
+streamlit
