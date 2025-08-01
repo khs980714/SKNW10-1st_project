@@ -17,7 +17,7 @@ requests, beautifulsoup4, selenium, steamlit, SQLite, matplotlib, seaborn, plotl
 
 ---
 ## ERD Diagram
-blank
+<img width="650" height="342" alt="SKNW10-1st_project" src="https://github.com/user-attachments/assets/287d3f79-051f-483e-9e59-13f1f6f439ea" />
 
 ---
 ## 화면 설계서
