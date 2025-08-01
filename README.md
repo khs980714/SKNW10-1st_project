@@ -4,16 +4,35 @@
 
 ---
 ## 기술 스택  
-이미지 추가 예정  
-화면설계 : figma  
-웹 : Streamlit  
-DB : SQLite  
-백엔드 : Python  
-업무 툴 : github  
+<img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/diagramsdotnet-F08705?style=for-the-badge&logo=diagramsdotnet&logoColor=white">    
+<img src="https://img.shields.io/badge/streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white">  
+<img src="https://img.shields.io/badge/sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white">  
+<img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">  
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">  
+<img src="https://img.shields.io/badge/cursor-181717?style=for-the-badge&logo=cursor&logoColor=white">  
 
 ---
 ## 활용 라이브러리
-requests, beautifulsoup4, selenium, steamlit, SQLite, matplotlib, seaborn, plotly
+### 데이터 수집
+- requests
+- beautifulsoup4
+- selenium
+
+### 데이터 처리
+- numpy
+- pandas
+- openpyxl
+
+### 웹
+- steamlit
+
+### DB
+- SQLite
+
+### 시각화
+- matplotlib
+- seaborn
+- plotly
 
 ---
 ## ERD Diagram
