@@ -1,11 +1,16 @@
 import os
 import pandas as pd
 import json
+from pathlib import Path
 
-BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+# 프로젝트 경로
+BASE_PATH = Path(__file__).parent.parent
 
-# FOLDER_PATH = "/data/register_car/"
-# EXCEL_LIST = os.listdir(FOLDER_PATH)
+# 데이터 경로
+FOLDER_PATH = BASE_PATH / "data" / "register_car"
+EXCEL_LIST = os.listdir(FOLDER_PATH)
+META_PATH = BASE_PATH / "data" / "meta_data.json"
+
 
 def extract_meta(data_path: str) -> dict:
     """
@@ -28,7 +33,8 @@ def extract_meta(data_path: str) -> dict:
     
     return meta_data
 
-def reshape_data_meta(meta_path: str) -> pd.DataFrame:
+
+def make_csv_with_meta(meta_path: str) -> pd.DataFrame:
     """
     JSON 형태의 메타 데이터를 csv 파일로 저장하고 데이터프레임으로 변환하는 코드
     Args:
@@ -47,6 +53,48 @@ def reshape_data_meta(meta_path: str) -> pd.DataFrame:
     
     df = pd.DataFrame(data_list)
 
-    df.to_csv("reshape_data.csv", index=False, encoding="utf-8")
+    df.to_csv("meta_data.csv", index=False, encoding="utf-8")
+
+    return df
+
+
+def make_csv_with_value(data_path: str) -> pd.DataFrame:
+    """
+    메타 데이터에 맞는 수치 데이터를 추출하여 csv로 저장하고 데이터프레임으로 반환하는 코드
+    Args:
+        data_path: 데이터 파일 경로(파일 이름에 연도월 포함)
+    Returns:
+        df: 월별 데이터를 데이터프레임으로 변환한 데이터
+    """
+    # 메타 데이터 및 데이터 파일 불러오기
+    original_df = pd.read_excel(data_path)
+    meta_data = pd.read_csv("value_data.csv")
+    data_dict = {
+        "year": [],
+        "month": [],
+        "register_count": [],
+    }
+
+    # 데이터 파일 이름에서 연도월 추출
+    year_month = data_path.split("시도별 ")[1].split(".xlsx")[0]
+    year, month = year_month[:4], year_month[4:]
+
+    # 메타 데이터 순회하여 original_df에서 해당하는 값 추출
+    for index, row in meta_data.iterrows():
+        sido = row["sido"]
+        sigungu = row["sigungu"]
+        car_type = row["car_type"]
+        car_purpose = row["car_purpose"]
+
+        data_dict["year"].append(year)
+        data_dict["month"].append(month)
+        filtered_index = original_df[(original_df.iloc[:, 1] == sido) & (original_df.iloc[:, 2] == sigungu)].index
+        value = original_df.loc[filtered_index, (original_df.iloc[3, :] == car_type) & (original_df.iloc[4, :] == car_purpose)].values[0]
+
+        data_dict["register_count"].append(value)
+
+    df = pd.DataFrame(data_dict)
+
+    df.to_csv("value_data.csv", index=False, encoding="utf-8")
 
     return df
