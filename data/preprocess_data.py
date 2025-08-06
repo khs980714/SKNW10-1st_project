@@ -1,6 +1,8 @@
 import os
 import pandas as pd
 import json
+from tqdm.auto import tqdm
+
 from pathlib import Path
 
 # 프로젝트 경로
@@ -10,7 +12,7 @@ BASE_PATH = Path(__file__).parent.parent
 FOLDER_PATH = BASE_PATH / "data" / "register_car"
 EXCEL_LIST = os.listdir(FOLDER_PATH)
 META_PATH = BASE_PATH / "data" / "meta_data.json"
-
+SAVE_PATH = BASE_PATH / "data"
 
 def extract_meta(data_path: str) -> dict:
     """
@@ -28,7 +30,7 @@ def extract_meta(data_path: str) -> dict:
         "car_purpose": list(df.iloc[4, :].unique())[3:],
     }
 
-    with open(f"meta_data.json", "w", encoding="utf-8") as f:
+    with open(f"{SAVE_PATH}/meta_data.json", "w", encoding="utf-8") as f:
         json.dump(meta_data, f, ensure_ascii=False)
     
     return meta_data
@@ -53,7 +55,7 @@ def make_csv_with_meta(meta_path: str) -> pd.DataFrame:
     
     df = pd.DataFrame(data_list)
 
-    df.to_csv("meta_data.csv", index=False, encoding="utf-8")
+    df.to_csv(f"{SAVE_PATH}/meta_data.csv", index=False, encoding="utf-8")
 
     return df
 
@@ -68,8 +70,12 @@ def make_csv_with_value(data_path: str) -> pd.DataFrame:
     """
     # 메타 데이터 및 데이터 파일 불러오기
     original_df = pd.read_excel(data_path)
-    meta_data = pd.read_csv("value_data.csv")
+    meta_data = pd.read_csv(f"{SAVE_PATH}/meta_data.csv")
     data_dict = {
+        "sido": [],
+        "sigungu": [],
+        "car_type": [],
+        "car_purpose": [],
         "year": [],
         "month": [],
         "register_count": [],
@@ -86,15 +92,37 @@ def make_csv_with_value(data_path: str) -> pd.DataFrame:
         car_type = row["car_type"]
         car_purpose = row["car_purpose"]
 
+        data_dict["sido"].append(sido)
+        data_dict["sigungu"].append(sigungu)
+        data_dict["car_type"].append(car_type)
+        data_dict["car_purpose"].append(car_purpose)
         data_dict["year"].append(year)
         data_dict["month"].append(month)
         filtered_index = original_df[(original_df.iloc[:, 1] == sido) & (original_df.iloc[:, 2] == sigungu)].index
-        value = original_df.loc[filtered_index, (original_df.iloc[3, :] == car_type) & (original_df.iloc[4, :] == car_purpose)].values[0]
+        value = original_df.loc[filtered_index, (original_df.iloc[3, :] == car_type) & (original_df.iloc[4, :] == car_purpose)].values[0][0]
 
         data_dict["register_count"].append(value)
 
     df = pd.DataFrame(data_dict)
 
-    df.to_csv("value_data.csv", index=False, encoding="utf-8")
-
     return df
+
+
+def value_data_with_folder(folder_path: str) -> pd.DataFrame:
+    """
+    다운로드 된 데이터를 저장한 data/register_car 폴더 내에 있는 모든 파일에 대해
+    make_csv_with_value 함수를 실행하여 하나의 csv 파일로 저장 및 데이터프레임으로 반환하는 코드
+    Args:
+        folder_path: 데이터 폴더 경로
+    Returns:
+        df: 데이터프레임
+    """
+    base_df = pd.DataFrame()
+
+    for file_name in tqdm(os.listdir(folder_path)):
+        df = make_csv_with_value(f"{folder_path}/{file_name}")
+        base_df = pd.concat([base_df, df])
+
+    base_df.to_csv(f"{SAVE_PATH}/monthly_data.csv", index=False, encoding="utf-8")
+
+    return base_df
