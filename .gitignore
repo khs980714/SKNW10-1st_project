@@ -14,3 +14,7 @@ chromedriver.exe
 test.ipynb
 test.py
 test.db
+
+# 쓰레기 데이터
+trash
+trash/*
