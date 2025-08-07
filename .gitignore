@@ -9,3 +9,7 @@ __pycache__
 
 # chrome driver
 chromedriver.exe
+
+# 테스트 파일
+test.ipynb
+test.py
