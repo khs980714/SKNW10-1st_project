@@ -13,8 +13,7 @@ chromedriver.exe
 # 테스트 파일
 test.ipynb
 test.py
-test.db
 
-# 쓰레기 데이터
+# 쓰레기 파일
 trash
 trash/*
