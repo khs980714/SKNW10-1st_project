@@ -1,9 +1,11 @@
 # 기본 설치
 jupyter
+tqdm
 
 # 데이터 처리
 numpy
 pandas
+openpyxl
 
 # 데이터 시각화
 matplotlib
