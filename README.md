@@ -36,6 +36,10 @@
 
 ---
 ## ERD Diagram
+> 수정본
+<img width="610" height="552" alt="SKNW10-1st_project (1)" src="https://github.com/user-attachments/assets/838960db-6b67-4ac8-b69d-419f568504f4" />
+
+> Ver1
 <img width="650" height="342" alt="SKNW10-1st_project" src="https://github.com/user-attachments/assets/287d3f79-051f-483e-9e59-13f1f6f439ea" />
 
 ---
