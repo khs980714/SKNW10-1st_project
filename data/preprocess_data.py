@@ -11,7 +11,6 @@ BASE_PATH = Path(__file__).parent.parent
 # 데이터 경로
 FOLDER_PATH = BASE_PATH / "data" / "register_car"
 EXCEL_LIST = os.listdir(FOLDER_PATH)
-META_PATH = BASE_PATH / "data" / "meta_data.json"
 SAVE_PATH = BASE_PATH / "data"
 
 def extract_meta(data_path: str) -> dict:
@@ -117,12 +116,35 @@ def value_data_with_folder(folder_path: str) -> pd.DataFrame:
     Returns:
         df: 데이터프레임
     """
-    base_df = pd.DataFrame()
+    # 월별 데이터 존재 여부 확인
+    print("월별 데이터 존재 확인")
+    if os.path.exists(f"{SAVE_PATH}/monthly_data.csv"):
+        base_df = pd.read_csv(f"{SAVE_PATH}/monthly_data.csv")
+        print("월별 데이터 존재")
+    else:
+        base_df = pd.DataFrame()
+        print("월별 데이터 존재하지 않음")
 
-    for file_name in tqdm(os.listdir(folder_path)):
-        df = make_csv_with_value(f"{folder_path}/{file_name}")
-        base_df = pd.concat([base_df, df])
+    date_list = []
+
+    # 월별 데이터 내의 연도 월 확인
+    print("데이터 내의 연도 월 확인")
+    for date_iter in tqdm(base_df.iterrows(), total=len(base_df)):
+        year, month = date_iter["year"], date_iter["month"]
+        csv_date = f"{year}{month}"
+        if csv_date not in date_list:
+            date_list.append(csv_date)
+
+    # 연도 월 데이터를 확인하여 data/register_car 폴더 내에 존재하는 파일 중 존재하지 않는 파일 추출
+    print("값 입력 시작")
+    for file_name in tqdm(os.listdir(folder_path), total=len(os.listdir(folder_path))):
+        file_date = file_name.split("시도별 ")[1].split(".xlsx")[0]
+        if file_date not in date_list:
+            df = make_csv_with_value(f"{folder_path}/{file_name}")
+            base_df = pd.concat([base_df, df])
+    print("값 입력 완료")
 
     base_df.to_csv(f"{SAVE_PATH}/monthly_data.csv", index=False, encoding="utf-8")
+    print("데이터 저장 완료")
 
     return base_df
